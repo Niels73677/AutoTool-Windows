@@ -15,6 +15,8 @@ echo 5) Make Text File
 echo 6) Delete Text File
 echo 7) Turn ON/OFF Windows Defender
 echo 8) Delete VBS File
+echo 9) Set password for Password Manager
+echo 10) Open Password Manager     
 echo i) Info
 echo Q) Quit
 set /p input= Enter Option:
@@ -27,6 +29,8 @@ if %input%==5 goto make
 if %input%==6 goto deltext
 if %input%==7 goto defender
 if %input%==8 goto delvbs
+if %input%==9 goto passlistset
+if %input%==10 goto passlist
 if %input%==i goto info 
 if %input%==Q exit
 
@@ -242,4 +246,64 @@ cd "%userprofile%/Desktop/%folderName%"
 del disable1.vbs
 del disable.vbs
 goto home
+
+
+
+:passlistset
+cls
+set /p pass1= Create a Password
+goto home
+
+
+
+:passlist
+cls
+set password= %pass1%
+set /p confirm= Open/Edit/Close/Delete Password List [Open,Edit,Close,Delete]:
+if %confirm%==Open goto open
+if %confirm%==Edit goto edit
+if %confirm%==Close goto close
+if %confirm%==Delete goto delete
+
+
+:edit
+set /p folderPlace= Enter Location to Save - FolderName:
+set /p passList= Enter Password:
+echo Enter only (1) Password
+cd "%userprofile%/Desktop/%folderPlace%"
+mkdir "%userprofile%/Desktop/%folderPlace%/Password"
+cd "%userprofile%/Desktop/%folderPlace%/Password"                
+echo %passList% >> PASS-LIST.txt
+attrib +h "%userprofile%/Desktop/%folderPlace%/Password"
+echo
+goto home
+
+          
+:open
+cls
+set /p pass= Enter Password:
+if %pass%==%password% goto good
+if not %pass%==%password% goto home
+
+
+:close
+cls
+attrib +h "%userprofile%/Desktop/%folderPlace%/Password"
+goto home
+
+
+:good
+cls
+attrib -h "%userprofile%/Desktop/%folderPlace%/Password"
+goto home
+
+
+:delete
+cls
+set /p folderPlace= Enter FolderName:
+cd "%userprofile%/Desktop/%folderPlace%/Password"
+del PASS-LIST.txt
+cd "%userprofile%/Desktop/%folderPlace%"
+rmdir Password
+
 
